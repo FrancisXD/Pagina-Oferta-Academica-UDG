@@ -1,1 +1,1 @@
-# Pagina-Control-Escolar-UDG
+# Pagina-Oferta-Academica-UDG
