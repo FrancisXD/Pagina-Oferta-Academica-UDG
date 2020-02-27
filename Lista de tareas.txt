@@ -1,0 +1,20 @@
+-Desarrollar la pantalla de inicio
+-Desarrollar la pantalla de Registro
+-Enlazar la pagina de inicio con la de registro
+-Validar que para registrarse todos los campos este llenos
+-Validar que en la base de datos no esten registrados el codigo y correo a registrar
+-Escribir registro en la base de datos              
+-Desarrollar pantalla de log in
+-Enlazar log in con inicio y registro
+-Validar que al iniciar sesion los campos este llenos
+-Validar que el usuario este en la base de datos y que las contraseñas coincidan
+-Desarrollar pantalla de consultas
+-Mostrar el nombre de la persona en las consultas
+-Enlazar log in con consultas
+-Programar el Cerrar sesion
+-Programar la busqueda de materias por nombre
+-Programar la busqueda de materias por profesor
+-Programar que se puedan consultar las materias por ambos parametros a la vez(nombre de materia y profesor)
+-Exportar las consultas a pdf
+-Validar que para exportar se alla hecho una consulta
+-Programar pagina de 
