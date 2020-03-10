@@ -20,7 +20,10 @@ class PaginaAdministrador extends React.Component {
                 </header>
                 <main className="row row-cols-1">
                     <div className="container-fluid contenedorSubirArchivo">
-                        <input type="file"/>
+                        <form action="localhost:4000/subir" method="POST" enctype="multipart/form-data">
+                            <input type="file"/>
+                            <input type="submit"/>
+                        </form>
                     </div>    
                 </main>
                 <footer className="row row-cols-1">

@@ -45,6 +45,10 @@ function dameColisiones() {
     return AdministradorArchivo.colisiones;
 }
 
+function dameGrupos() {
+    return AdministradorArchivo.grupos;
+}
+
 function leerGrupos() {
     var buffer, posInicialBuffer, posFinalBuffer, posInicio, posFinal, registroGrupo;
     var grupo, horario, buscarRegistros = true;
@@ -141,6 +145,11 @@ function leerGrupos() {
         }
     }
     QuickSort.ordenar(AdministradorArchivo.grupos,0,AdministradorArchivo.grupos.length-1);
+    /*
+    for(var i = 0;i < AdministradorArchivo.grupos.length;i++) {
+        console.log(AdministradorArchivo.grupos[i]);
+    }
+    */
     buscarColisiones();
 }
 
@@ -289,12 +298,12 @@ function sonIguales(horarioUno,horarioDos) {
             else {
                 totalDias = horarioDos.dias.length;
             }
+            horariosIguales = false;
             for(var i = 0;i < totalDias;i++) {
                 if(horarioUno.dias[i] == horarioDos.dias[i]) {
                     horariosIguales = true;
                 }
             }
-            horariosIguales = false;
         }
         else {
             horariosIguales = false;
@@ -317,5 +326,6 @@ AdministradorArchivo.dameTotalProfesores = dameTotalProfesores;
 AdministradorArchivo.dameTotalMaterias = dameTotalMaterias;
 AdministradorArchivo.dameTotalDepartamentos = dameTotalDepartamentos;
 AdministradorArchivo.dameColisiones = dameColisiones;
+AdministradorArchivo.dameGrupos = dameGrupos;
 
 module.exports = AdministradorArchivo;
