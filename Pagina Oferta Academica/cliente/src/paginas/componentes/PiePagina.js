@@ -5,9 +5,9 @@ import "./estilos/EstiloPiePagina.css";
 class PiePagina extends React.Component {
     render() {
         return(
-            <footer className="piePagina">
+            <div className="piePagina">
                 <small className="texto">Derechos Reservados 2020</small>
-            </footer>
+            </div>
         );
     }
 }
