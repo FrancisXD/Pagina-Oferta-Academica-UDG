@@ -1,46 +1,43 @@
-var express = require("express");
-var formidable = require("formidable");
-var color = require("colors");
+var Color = require("colors");
+var HTTP = require("http");
+var Express = require("express");
+var SocketIO = require("socket.io");
+var FileUpload = require("express-fileupload");
 var administradorArchivo = require("./AdministradorMaterias");
 
-const PUERTO = 4000;
-//const NOM_ARCHIVO = "./Oferta_2016_Mod2.txt";
-
-var servidor = express();
-
-/*
-administradorArchivo.fijaNombreArchivo(NOM_ARCHIVO);
-administradorArchivo.leerGrupos();
-console.log("Total profesores: "+administradorArchivo.dameTotalProfesores());
-console.log("Total materias: "+administradorArchivo.dameTotalMaterias());
-console.log("Total departamentos: "+administradorArchivo.dameTotalDepartamentos());
-console.log(administradorArchivo.dameColisiones());
-var colisiones = administradorArchivo.dameColisiones();
-var grupos = administradorArchivo.dameGrupos();
-for(var i = 14;i < colisiones.length;i++) {
-    for(var j = 0;j < colisiones[j].length;j++) {
-        console.log(grupos[colisiones[i][j]]);
-    }
-}
-*/
-
-servidor.get("/",(solicitud,respuesta) => {
-    respuesta.send("Hola");
+var rutaArchivo;
+var archivo;
+var puerto;
+var app = Express();
+var servidor = HTTP.createServer(app);
+var receptor = SocketIO(servidor,{
+    serveClient: true
 });
 
-servidor.post("/subir",(solicitud,respuesta) => {
-    let form = formidable.IncomingForm();
+app.set("PUERTO",process.env.PORT || 4000);
+app.use(FileUpload());
+servidor.listen((puerto = app.get("PUERTO")),() => {
+    console.log(Color.green("Servidor iniciado en el puerto:"),puerto);
+});
 
-    form.on("fileBegin",(nombre,archivo) => {
-        archivo.path = "./archivos"+archivo.name;
-    });
-    form.on("file",(nombre,file) => {
-        administradorArchivo.fijaNombreArchivo(archivo.path);
+app.post('/subir',(req,res)=> {
+    archivo = req.files.archivo;
+    archivo.mv((nombreArchivo = ("./archivos/"+archivo.name)));
+    res.send("bien");
+});
+
+receptor.on('connection',(socket) => {
+    console.log("Nueva conexión ID: "+socket.id);
+
+    socket.on('subirArchivo',()=> {
+        administradorArchivo.fijaNombreArchivo(nombreArchivo);
         administradorArchivo.leerGrupos();
-        respuesta.send(administradorArchivo.dameColisiones());
+
+        socket.emit('archivoSubido',{
+            totalProfesores: administradorArchivo.dameTotalProfesores(),
+            totalDepartamentos: administradorArchivo.dameTotalDepartamentos(),
+            totalMaterias: administradorArchivo.dameTotalMaterias(),
+            totalEdificios: administradorArchivo.dameTotalEdificios()
+        });
     });
 });
-
-servidor.listen(PUERTO,() => {
-    console.log("Servidor iniciado en el puerto:".green,PUERTO);
-})

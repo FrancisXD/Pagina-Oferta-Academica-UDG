@@ -18,6 +18,7 @@ var AdministradorArchivo = {
     grupos: [],
     profesores: [],
     departamentos: [],
+    edificios: [],
     colisiones: []
 };
 
@@ -39,6 +40,10 @@ function dameTotalMaterias() {
 
 function dameTotalDepartamentos() {
     return AdministradorArchivo.departamentos.length;
+}
+
+function dameTotalEdificios() {
+    return AdministradorArchivo.edificios.length;
 }
 
 function dameColisiones() {
@@ -139,17 +144,13 @@ function leerGrupos() {
             AdministradorArchivo.grupos.push(grupo);
             guardarMateria(materia);
             guardarDepartmento(materia);
+            guardarEdificio(horario.edificio);
         }
         else {
             buscarRegistros = false;
         }
     }
     QuickSort.ordenar(AdministradorArchivo.grupos,0,AdministradorArchivo.grupos.length-1);
-    /*
-    for(var i = 0;i < AdministradorArchivo.grupos.length;i++) {
-        console.log(AdministradorArchivo.grupos[i]);
-    }
-    */
     buscarColisiones();
 }
 
@@ -241,6 +242,14 @@ function guardarDepartmento(materia) {
     }
 }
 
+function guardarEdificio(edificio) {
+    if(edificio != "") {
+        if(AdministradorArchivo.edificios.indexOf(edificio) == -1) {
+            AdministradorArchivo.edificios.push(edificio);
+        }
+    }
+}
+
 function buscarColisiones() {
     var grupos, horaInicio, i, j, horarioAct, horario, totalGrupos;
     var horasInicio, cuentaHorasInicio;
@@ -325,6 +334,7 @@ AdministradorArchivo.fijaNombreArchivo = fijaNombreArchivo;
 AdministradorArchivo.dameTotalProfesores = dameTotalProfesores;
 AdministradorArchivo.dameTotalMaterias = dameTotalMaterias;
 AdministradorArchivo.dameTotalDepartamentos = dameTotalDepartamentos;
+AdministradorArchivo.dameTotalEdificios = dameTotalEdificios;
 AdministradorArchivo.dameColisiones = dameColisiones;
 AdministradorArchivo.dameGrupos = dameGrupos;
 
