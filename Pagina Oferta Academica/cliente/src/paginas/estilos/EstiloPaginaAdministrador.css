@@ -73,3 +73,10 @@
 .celdaNRC {
     max-width: 5px;
 }
+
+.totalColisiones {
+    margin: 1px;
+    padding: 0px;
+    float: left;
+    display: flexbox;
+}

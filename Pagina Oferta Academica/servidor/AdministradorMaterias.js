@@ -67,7 +67,6 @@ function obtenerColisiones() {
             AdministradorArchivo.colisiones.push(grupos[iColision]);
         }
     }
-    console.log(AdministradorArchivo.colisiones.length);
     return AdministradorArchivo.colisiones;
 }
 
@@ -172,7 +171,6 @@ function leerGrupos() {
         }
     }
     QuickSort.ordenar(AdministradorArchivo.grupos,0,AdministradorArchivo.grupos.length-1);
-    eliminarRegistrosRepetidos();
     buscarColisiones();
 }
 
@@ -304,11 +302,13 @@ function buscarColisiones() {
             while(sonIgualesHoraInicio(horarioAct.horaInicio,horario.horaInicio)) {
                 if(!tieneDatoshorarioVacios(horarioAct) && !tieneDatoshorarioVacios(horario)) {
                     if(sonIguales(horarioAct,horario)) {
-                        if(AdministradorArchivo.indicesColisiones[cuentaHorasInicio].indexOf(i) == -1) {
-                            AdministradorArchivo.indicesColisiones[cuentaHorasInicio].push(i);
-                        }
-                        if(AdministradorArchivo.indicesColisiones[cuentaHorasInicio].indexOf(j) == -1) {
-                            AdministradorArchivo.indicesColisiones[cuentaHorasInicio].push(j);
+                        if(!sonGruposIguales(grupos[i], grupos[j])) {
+                            if(AdministradorArchivo.indicesColisiones[cuentaHorasInicio].indexOf(i) == -1) {
+                                AdministradorArchivo.indicesColisiones[cuentaHorasInicio].push(i);
+                            }
+                            if(AdministradorArchivo.indicesColisiones[cuentaHorasInicio].indexOf(j) == -1) {
+                                AdministradorArchivo.indicesColisiones[cuentaHorasInicio].push(j);
+                            }
                         }
                     }
                 }
@@ -389,40 +389,10 @@ function sonIgualesHoraInicio(horaUno,horaDos) {
     }
 }
 
-function eliminarRegistrosRepetidos() {
-    var i, j, grupos;
-
-    for(i = 0;i < AdministradorArchivo.grupos.length-1;i++) {
-        for(j = i+1;j < AdministradorArchivo.grupos.length;j++) {
-            if(AdministradorArchivo.grupos[i].nrc === AdministradorArchivo.grupos[j].nrc) {
-                if(sonGruposIguales(AdministradorArchivo.grupos[i],AdministradorArchivo.grupos[j])) {
-                    AdministradorArchivo.grupos.splice(j, 1);
-                    j--;
-                }
-            }
-            else {
-                break;
-            }
-        }
-    }
-}
-
 function sonGruposIguales(grupoUno,grupoDos) {
-    if(JSON.stringify(grupoUno.materia) === JSON.stringify(grupoDos.materia)) {
-        if(JSON.stringify(grupoUno.horario) === JSON.stringify(grupoDos.horario)) {
-            if(JSON.stringify(grupoUno.profesor) === JSON.stringify(grupoDos.profesor)) {
-                if(grupoUno.nrc == grupoDos.nrc) {
-                   if(grupoUno.seccion == grupoDos.seccion) {
-                       if(grupoUno.cupo == grupoDos.cupo) {
-                           if(grupoUno.ocupado == grupoDos.ocupado) {
-                               if(grupoUno.disponible == grupoDos.disponible) {
-                                    return true;
-                               }
-                           }
-                       }
-                   } 
-                }
-            } 
+    if(grupoUno.nrc === grupoDos.nrc) {
+        if(grupoUno.materia.nombre === grupoDos.materia.nombre) {
+            return true;
         }
     }
     return false;

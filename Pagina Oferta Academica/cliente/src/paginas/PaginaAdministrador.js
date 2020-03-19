@@ -97,6 +97,7 @@ class PaginaAdministrador extends React.Component {
                                     <p className="col-1 celda">Fin</p>
                             </div>);
         for(i = this.state.iColisionInicial;i < maxColisionesAMostrar;i++) {
+            if(i < this.state.colisiones.length) {
             colisionesCad.push(<div className="row colision">
                                     <p className="col-1 celda">{grupos[i].nrc}</p>
                                     <p className="col-6 celda">{grupos[i].materia.nombre.substring(0,40)}</p>
@@ -106,9 +107,10 @@ class PaginaAdministrador extends React.Component {
                                     <p className="col-1 celda">{grupos[i].horario.horaInicio}</p>
                                     <p className="col-1 celda">{grupos[i].horario.horaFin}</p>
                                 </div>);
+            }
         }
         
-        if(i === this.state.colisiones.length) {
+        if(i >= this.state.colisiones.length) {
             this.setState({
                 colisionesAMostrar: colisionesCad,
                 iColisionInicial: i,
@@ -234,6 +236,7 @@ class PaginaAdministrador extends React.Component {
                             <div className="conteiner-fluid">
                                 {this.state.colisionesAMostrar}
                             </div>
+                            <p className="totalColisiones">Total colisiones: {this.state.colisiones.length}</p>
                             <BotonRellenado etiqueta="siguiente" 
                                 display={this.state.mostrarBotonSiguiente} 
                                 onClick={this.manejadorClickSiguiente}/>

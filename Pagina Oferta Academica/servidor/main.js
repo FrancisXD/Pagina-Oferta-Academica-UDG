@@ -29,7 +29,7 @@ servidor.listen((puerto = app.get("PUERTO")),() => {
     dao.obtenerArchivo();
     setTimeout(() => {
         res = dao.dameRutaArchivo();
-        if(res === undefined) {
+        if(res.length == 0) {
             hayArchivo = false;
         }
         else {
