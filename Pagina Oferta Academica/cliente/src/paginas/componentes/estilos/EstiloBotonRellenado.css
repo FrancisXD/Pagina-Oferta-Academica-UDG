@@ -1,0 +1,18 @@
+.botonRellenado {
+    color: rgb(0,90,186);
+    background-color: rgb(255,255,255);
+    border: 0px;
+    box-shadow: rgb(0,0,0) 3px 3px 8px;
+    margin-top: 16px;
+    margin-right: 16px;
+    margin-bottom: 16px;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font: bold 12px Arial;
+    float: right;
+    border-radius: 2px;
+    width: 80px;
+    height: 30px;
+}

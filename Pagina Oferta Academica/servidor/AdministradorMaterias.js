@@ -19,11 +19,21 @@ var AdministradorArchivo = {
     profesores: [],
     departamentos: [],
     edificios: [],
+    indicesColisiones: [],
     colisiones: []
 };
 
 function fijaNombreArchivo(nombreArchivo) {
-    AdministradorArchivo.nombreArchivo = nombreArchivo;
+    AdministradorArchivo = {
+        nombreArchivo: nombreArchivo,
+        materias: [],
+        grupos: [],
+        profesores: [],
+        departamentos: [],
+        edificios: [],
+        indicesColisiones: [],
+        colisiones: []
+    };
 }
 
 function dameNombreArchivo() {
@@ -46,7 +56,18 @@ function dameTotalEdificios() {
     return AdministradorArchivo.edificios.length;
 }
 
-function dameColisiones() {
+function obtenerColisiones() {
+    var i, j, iColision;
+
+    var grupos = AdministradorArchivo.grupos;
+    var indicesColisiones = AdministradorArchivo.indicesColisiones;
+    for(i = 0;i < indicesColisiones.length;i++) {
+        for(j = 0;j < indicesColisiones[i].length;j++) {
+            iColision = indicesColisiones[i][j];
+            AdministradorArchivo.colisiones.push(grupos[iColision]);
+        }
+    }
+    console.log(AdministradorArchivo.colisiones.length);
     return AdministradorArchivo.colisiones;
 }
 
@@ -141,7 +162,7 @@ function leerGrupos() {
             materia.nivel = registroGrupo.substring(posInicio,registroGrupo.length).replace("\r","");
             grupo.materia = materia;
 
-            AdministradorArchivo.grupos.push(grupo);
+            guardarGrupo(grupo);
             guardarMateria(materia);
             guardarDepartmento(materia);
             guardarEdificio(horario.edificio);
@@ -151,6 +172,7 @@ function leerGrupos() {
         }
     }
     QuickSort.ordenar(AdministradorArchivo.grupos,0,AdministradorArchivo.grupos.length-1);
+    eliminarRegistrosRepetidos();
     buscarColisiones();
 }
 
@@ -226,6 +248,14 @@ function completarHora(hora) {
     }
 }
 
+function guardarGrupo(grupo) {
+    if(grupo) {
+        if(AdministradorArchivo.grupos.indexOf(grupo) == -1) {
+            AdministradorArchivo.grupos.push(grupo);
+        }
+    }
+}
+
 function guardarMateria(materia) {
     if(materia.nombre != "") {
         if(AdministradorArchivo.materias.indexOf(materia.nombre) == -1) {
@@ -267,17 +297,19 @@ function buscarColisiones() {
             if(horasInicio.indexOf(horaInicio) == -1) {
                 cuentaHorasInicio++;
                 horasInicio.push(horaInicio);
-                AdministradorArchivo.colisiones.push([]);
+                AdministradorArchivo.indicesColisiones.push([]);
             }
             j = i+1;
             horario = grupos[j].horario;
             while(sonIgualesHoraInicio(horarioAct.horaInicio,horario.horaInicio)) {
-                if(sonIguales(horarioAct,horario)) {
-                    if(AdministradorArchivo.colisiones[cuentaHorasInicio].indexOf(i) == -1) {
-                        AdministradorArchivo.colisiones[cuentaHorasInicio].push(i);
-                    }
-                    if(AdministradorArchivo.colisiones[cuentaHorasInicio].indexOf(j) == -1) {
-                        AdministradorArchivo.colisiones[cuentaHorasInicio].push(j);
+                if(!tieneDatoshorarioVacios(horarioAct) && !tieneDatoshorarioVacios(horario)) {
+                    if(sonIguales(horarioAct,horario)) {
+                        if(AdministradorArchivo.indicesColisiones[cuentaHorasInicio].indexOf(i) == -1) {
+                            AdministradorArchivo.indicesColisiones[cuentaHorasInicio].push(i);
+                        }
+                        if(AdministradorArchivo.indicesColisiones[cuentaHorasInicio].indexOf(j) == -1) {
+                            AdministradorArchivo.indicesColisiones[cuentaHorasInicio].push(j);
+                        }
                     }
                 }
                 if(j < totalGrupos) {
@@ -292,6 +324,25 @@ function buscarColisiones() {
         else {
             i++;
         }
+    }
+}
+
+function tieneDatoshorarioVacios(horario) {
+    if(horario.edificio !== "") {
+        if(horario.aula !== "") {
+            if(horario.dias.length > 0) {
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+        else {
+            return true;
+        }
+    }
+    else {
+        return true;
     }
 }
 
@@ -325,7 +376,56 @@ function sonIguales(horarioUno,horarioDos) {
 }
 
 function sonIgualesHoraInicio(horaUno,horaDos) {
-    return (horaUno === horaDos);
+    if(horaUno !== "" && horaDos !== "") {
+        if(horaUno === horaDos) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    else {
+        return false;
+    }
+}
+
+function eliminarRegistrosRepetidos() {
+    var i, j, grupos;
+
+    for(i = 0;i < AdministradorArchivo.grupos.length-1;i++) {
+        for(j = i+1;j < AdministradorArchivo.grupos.length;j++) {
+            if(AdministradorArchivo.grupos[i].nrc === AdministradorArchivo.grupos[j].nrc) {
+                if(sonGruposIguales(AdministradorArchivo.grupos[i],AdministradorArchivo.grupos[j])) {
+                    AdministradorArchivo.grupos.splice(j, 1);
+                    j--;
+                }
+            }
+            else {
+                break;
+            }
+        }
+    }
+}
+
+function sonGruposIguales(grupoUno,grupoDos) {
+    if(JSON.stringify(grupoUno.materia) === JSON.stringify(grupoDos.materia)) {
+        if(JSON.stringify(grupoUno.horario) === JSON.stringify(grupoDos.horario)) {
+            if(JSON.stringify(grupoUno.profesor) === JSON.stringify(grupoDos.profesor)) {
+                if(grupoUno.nrc == grupoDos.nrc) {
+                   if(grupoUno.seccion == grupoDos.seccion) {
+                       if(grupoUno.cupo == grupoDos.cupo) {
+                           if(grupoUno.ocupado == grupoDos.ocupado) {
+                               if(grupoUno.disponible == grupoDos.disponible) {
+                                    return true;
+                               }
+                           }
+                       }
+                   } 
+                }
+            } 
+        }
+    }
+    return false;
 }
 
 AdministradorArchivo.leerGrupos = leerGrupos;
@@ -335,7 +435,7 @@ AdministradorArchivo.dameTotalProfesores = dameTotalProfesores;
 AdministradorArchivo.dameTotalMaterias = dameTotalMaterias;
 AdministradorArchivo.dameTotalDepartamentos = dameTotalDepartamentos;
 AdministradorArchivo.dameTotalEdificios = dameTotalEdificios;
-AdministradorArchivo.dameColisiones = dameColisiones;
+AdministradorArchivo.obtenerColisiones = obtenerColisiones;
 AdministradorArchivo.dameGrupos = dameGrupos;
 
 module.exports = AdministradorArchivo;
