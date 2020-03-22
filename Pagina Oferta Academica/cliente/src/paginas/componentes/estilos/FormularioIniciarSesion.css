@@ -1,0 +1,58 @@
+.contenedorFormulario {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.formulario {
+    width: 500px;
+    height: 300px;
+    margin: 68px;
+    padding: 10px;
+    box-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+}
+
+.tituloFormulario {
+    color: rgb(0,90,186);
+    font: bold 25px Arial;
+    text-shadow: 5px 5px 5px rgba(0, 0, 0, 0.3);
+    margin: 10px;
+}
+
+.division {
+    border-style: solid;
+    border-width: 1px 0px 0px 0px;
+    padding: 0px;
+    margin: 10px;
+}
+
+.campo {
+    display: block;
+    border-style: solid;
+    border-color: black;
+    border-width: 1px;
+    border-radius: 5px;
+    margin-top: 16px;
+    margin-bottom: 16px;
+    margin-left: 40px;
+    padding: 5px;
+    width: 400px;
+    height: 30px;
+}
+
+.campo::placeholder {
+    color: black;
+}
+
+.divisionFinal {
+    margin-bottom: 180px;
+}
+
+.etiquetaRecuperarContrasenia {
+    display: inline-flex;
+    float: left;
+    color: rgb(0,90,186);
+    margin-top: 25px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}

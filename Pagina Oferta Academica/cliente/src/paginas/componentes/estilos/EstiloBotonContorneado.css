@@ -1,18 +1,19 @@
-.boton {
-    font-size: 10px;
+.bo {
+    font: normal 12px Arial;
     color: rgb(255,255,255);
     border-color: rgb(255,255,255);
-    text-align: center;
     display: flex;
+    text-align: center;
     align-items: center;
     justify-content: center;
     margin-right: 16px;
     margin-top: 16px;
     margin-bottom: 16px;
     float: right;
+    height: 30px;
 }
 
-.boton:hover {
+.bo:hover {
     background-color: rgba(255,255,255,0.3);
     border-color: rgb(255,255,255);
 }

@@ -3,7 +3,6 @@ import ReactDOM from "react-dom";
 
 import "bootstrap/dist/css/bootstrap.css";
 
-import PaginaPrincipal from "./paginas/PaginaPrincipal";
-import PaginaAdministrador from "./paginas/PaginaAdministrador";
+import App from "./App";
 
-ReactDOM.render(<PaginaAdministrador/>,document.getElementById("root"));
+ReactDOM.render(<App/>,document.getElementById("root"));

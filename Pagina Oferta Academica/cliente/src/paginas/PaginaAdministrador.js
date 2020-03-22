@@ -6,7 +6,6 @@ import BotonRellenado from "./componentes/BotonRellenado";
 import PiePagina from "./componentes/PiePagina";
 
 import Logo from "./imagenes/logo.png";
-import IconoSubirArchivo from "./imagenes/iconoSubirArchivo.png";
 import IconoDocumento from "./imagenes/iconoDocumento.png";
 
 import "./componentes/estilos/EstiloBarraNavegacion.css";
@@ -153,7 +152,7 @@ class PaginaAdministrador extends React.Component {
                                 </div>);
         }
         
-        if(i == this.state.maxColisionesAVisualizar) {
+        if(i === this.state.maxColisionesAVisualizar) {
             this.setState({
                 colisionesAMostrar: colisionesCad,
                 iColisionInicial: i,
@@ -205,7 +204,9 @@ class PaginaAdministrador extends React.Component {
                                         maxWidth: "16px",
                                         maxHeight: "16px",
                                         marginRight: "10px"
-                                    }}/>
+                                    }}
+                                    alt="documento"
+                                />
                                 {this.state.nombreArchivo}
                                 {this.state.fecha}
                             </p>

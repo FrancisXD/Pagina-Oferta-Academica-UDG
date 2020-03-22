@@ -1,0 +1,19 @@
+.boton {
+    background-color: transparent;
+    color: white;
+    border: 0px;
+    font: normal 16px Arial;
+    float: right;
+    display: flex;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    margin: 16px;
+    padding: 0px;
+    width: 100px;
+}
+
+.boton:hover {
+    cursor: pointer;
+    background-color: transparent;
+}

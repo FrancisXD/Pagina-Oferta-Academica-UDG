@@ -1,4 +1,5 @@
 var BaseDatos = require("./ConectorBDA");
+var Usuario = require('./Usuario');
 var SistemaArchivo = require("fs");
 
 var AdministradorGruposDAO = class AdministradorGruposDAO {
@@ -6,8 +7,17 @@ var AdministradorGruposDAO = class AdministradorGruposDAO {
         this.basedatos = new BaseDatos("root","1234","Oferta_Academica");
     }
 
-    obtenerArchivo() {
-        this.basedatos.ejecutarInstruccion("SELECT * FROM archivo");
+    static comprobarUsuario(usuario, contrasenia) {
+        var usuario, instruccion;
+
+        usuario = new Usuario(usuario, contrasenia);
+        instruccion = "SELECT * FROM usuario "+
+            "WHERE nombre_usuario='"+usuario+"' AND contrasenia='"+contrasenia+"'";
+    }
+
+    obtenerArchivo(res) {
+        var cosulta = "SELECT * FROM archivo";
+        this.basedatos.ejecutarInstruccion(res, cosulta);
     }
 
     guardarArchivo(nombre,rutaArchivo) {

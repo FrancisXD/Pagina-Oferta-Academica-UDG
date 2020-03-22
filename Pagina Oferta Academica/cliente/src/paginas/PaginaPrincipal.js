@@ -1,33 +1,33 @@
 import React from "react";
 
+import BarraNavegacion from "./componentes/BarraNavegacion";
 import BotonContorneado from "./componentes/BotonContorneado";
 import BotonRellenado from "./componentes/BotonRellenado";
 import PiePagina from "./componentes/PiePagina";
 
 import "./estilos/EstiloPaginaPrincipal.css";
-import "./componentes/estilos/EstiloBarraNavegacion.css";
 
 import EdificioUDG from "./imagenes/udg.jpg"
-import Logo from "./imagenes/logo.png";
 
 class PaginaPrincipal extends React.Component {
+    manejadorClickIniciarSesion = e => {
+        this.props.history.push("/iniciar_sesion");
+    }
+
+    manejadorClickRegistrarse = e => {
+        this.props.history.push("/registrarse");
+    }
+
     render() {
+        var botones = [<BotonContorneado ancho="150px" onClick={this.manejadorClickIniciarSesion} etiqueta="INICIAR SESIÓN"/>,
+                       <BotonRellenado onClick={this.manejadorClickRegistrarse} etiqueta="REGISTRARSE"/>];
+
         return(
-            <div className="container-fluid">
-                <header className="row row-cols-1">
-                    <nav className="barraNavegacion">
-                        <img className="logo" src={Logo} alt="logo cucei"/>
-                        <BotonContorneado etiqueta="INICIAR SESIÓN"/>
-                        <BotonRellenado etiqueta="REGISTRARSE"/>
-                    </nav>
-                </header>
-                <main className="row row-cols-1">
-                    <img className="edificioUDG" src={EdificioUDG} alt="edificio UDG"/>
-                </main>
-                <footer className="row row-cols-1">
-                    <PiePagina/>
-                </footer>
-            </div>
+            <React.Fragment>
+                <BarraNavegacion margenDerecho="700px" boton={botones}/>
+                <img className="edificioUDG" src={EdificioUDG} alt="edificio UDG"/>
+                <PiePagina/>
+            </React.Fragment>
         );
     }
 }
