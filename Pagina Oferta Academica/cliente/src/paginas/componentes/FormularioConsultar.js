@@ -15,7 +15,7 @@ let formulario = (props) => (
         <input className="cam" type="text" placeholder="profesor"/>
         <BotonRellenado etiqueta="CONSULTAR" ancho="90px" display="inline-flex" flotar="none"/>
         <BotonRellenado etiqueta="EXPORTAR" ancho="80px" display="inline-flex" flotar="right"/>
-        <div class="contenedorConsulta">{props.consulta}</div>
+        <div className="contenedorConsulta">{props.consulta}</div>
     </div>
 );
 

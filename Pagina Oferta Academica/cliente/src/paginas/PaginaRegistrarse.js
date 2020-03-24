@@ -31,7 +31,7 @@ class PaginaRegistrarse extends React.Component {
 
     manejadorSubmit = async e => {
         let configuracion;
-        var res, respuesta;
+        var res;
 
         e.preventDefault();
         try {
@@ -44,23 +44,51 @@ class PaginaRegistrarse extends React.Component {
                 body: JSON.stringify(this.state.usuario)
             };
 
-            res = await fetch("http://localhost:8000/api/registrarse", configuracion);
-            respuesta = res.json();
-            console.log(respuesta);
+            await fetch("http://localhost:8000/api/registrarse", configuracion).then(
+                dataWrappedByPromise => dataWrappedByPromise.json()
+                ).then(
+                    data => {
+                        res = data;
+                    }
+                );
+            if(res.error) {
+                alert("nombre se usuario ya utilizado");
+            }
+            else {
+                if(res.filasAfectadas === 1) {
+                    alert("Su registro a sido guardado correctamente");
+                    this.inicializarEstado();
+                }
+                else {
+                    alert("Se crearon mas registros");
+                }
+            }
         }
         catch(err) {
             this.setState({
                 error: true
             });
-            console.log("error");
         }
     }
 
+    inicializarEstado() {
+        this.setState({
+            usuario: {
+                codigo: 0,
+                nombre: "",
+                nombreUsuario: "",
+                contrasenia: "",
+                correoElectronico: ""
+            } 
+        });
+    }
+
     render() {
-        var boton = <BotonTexto
+        var boton = [<BotonTexto
+                        key="1"
                         etiqueta="INICIO"
                         onClick={this.manejadorClick}
-                    />
+                    />]
 
         return(
             <React.Fragment>

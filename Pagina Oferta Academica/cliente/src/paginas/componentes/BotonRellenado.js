@@ -9,9 +9,9 @@ var botonRelenado = (props) => {
             onSubmit={props.onSubmit}
             style={{
                 display: props.display,
-                width: props.ancho,
-                marginTop: props.margenSuperior,
-                float: props.flotar
+                width: props.ancho || "100px",
+                marginTop: props.margenSuperior || "0px",
+                float: props.flotar || "right"
             }}>
             {props.etiqueta}
         </button>

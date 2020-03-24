@@ -36,17 +36,34 @@ let conectorBDA = class ConectorBDA {
         }
     }
 
-    ejecutar(instruccion) {
+    ejecutar(res, instruccion) {
         this.conexion = MySQL.createConnection({
             host: "localhost",
             user: this.usuario,
             password: this.contrasenia,
             database: this.basedatos
         });
+
         if(this.conexion) {
             this.conexion.connect();
-            this.conexion.query(instruccion);
+            this.conexion.query(instruccion, (err, resultado) => {
+                if(err) {
+                    res.status(500).json({
+                        error: err.message
+                    });
+                }
+                else {
+                    res.json({
+                        filasAfectadas: resultado.affectedRows
+                    });
+                }
+            });
             this.conexion.end();
+        }
+        else {
+            res.status(500).json({
+                error: "no se pudo conectar a la base de datos"
+            });
         }
     }
 };

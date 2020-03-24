@@ -14,7 +14,9 @@ let barra = (props) => (
                     marginRight: props.margenDerecho
                 }}
             />
-            {props.boton}
+            {props.boton.map(b => {
+                return b;
+            })}
     </nav>
 );
 

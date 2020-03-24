@@ -29,6 +29,7 @@ var FormularioIniciarSesion = (props) => (
                 onClick={props.onClick}
                 ancho="120px"
                 etiqueta="INICIAR SESIÓN"
+                margenSuperior="16px"
             />
         </div>
     </div>

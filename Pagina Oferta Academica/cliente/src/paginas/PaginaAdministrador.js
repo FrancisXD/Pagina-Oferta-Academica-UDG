@@ -1,256 +1,249 @@
 import React from "react";
-import SocketIOClient from "socket.io-client";
 
+import BarraNavegacion from "./componentes/BarraNavegacion";
 import BotonContorneado from "./componentes/BotonContorneado";
 import BotonRellenado from "./componentes/BotonRellenado";
 import PiePagina from "./componentes/PiePagina";
+import VisorArchivo from "./componentes/VisorArchivo";
+import SelectorArchivo from "./componentes/SelecionadorArchivo";
+import Pagina404 from "./404";
 
-import Logo from "./imagenes/logo.png";
-import IconoDocumento from "./imagenes/iconoDocumento.png";
-
-import "./componentes/estilos/EstiloBarraNavegacion.css";
 import "./estilos/EstiloPaginaAdministrador.css";
-import "./componentes/estilos/EstiloBotonContorneado.css";
 
 class PaginaAdministrador extends React.Component {
+    
     state = {
-        maxColisionesAVisualizar: 8,
-        nombreAdministrador: "Nombre administrador",
-        nombreArchivo: "",
+        nombreUsuario: null,
+        archivo: null,
+        formulario: null,
         totalProfesores: 0,
         totalDepartamentos: 0,
         totalMaterias: 0,
         totalEdificios: 0,
         colisiones: [],
-        colisionesAMostrar: null,
-        iColisionInicial: 0,
-        mostrarBotonSiguiente: "none",
-        mostrarBotonAnterior: "none"
+        nombreArchivo: "",
+        verCruzEliminarArchivo: "hidden",
+        error: false
     }
 
     componentDidMount() {
-        this.socket = SocketIOClient("http://localhost:4000");
+        if(this.props.location.state) {
+            this.setState({
+                nombreUsuario: this.props.location.state.nombre
+            });
+            this.inicializarDatosArchivo();
+        }
+        else{
+            this.setState({
+                error: true
+            });
+        }
+    }
 
-        this.socket.on('archivoSubido',(datos)=> {
-            var colisionesCad = [], i, maxColisionesAMostrar;
-            var grupos = datos.colisiones;
+    inicializarDatosArchivo = async () => {
+        var res;
 
-            maxColisionesAMostrar = this.state.iColisionInicial+this.state.maxColisionesAVisualizar;
-            colisionesCad.push(<div className="row colision">
-                                    <p className="col-1 celda">NRC</p>
-                                    <p className="col-6 celda">Materia</p>
-                                    <p className="col-1 celda">Edificio</p>
-                                    <p className="col-1 celda">Aula</p>
-                                    <p className="col-1 celda">Dias</p>
-                                    <p className="col-1 celda">Inicio</p>
-                                    <p className="col-1 celda">Fin</p>
-                            </div>);
-            for(i = this.state.iColisionInicial;i < maxColisionesAMostrar;i++) {
-                colisionesCad.push(<div className="row colision">
-                                    <p className="col-1 celda">{grupos[i].nrc}</p>
-                                    <p className="col-6 celda">{grupos[i].materia.nombre.substring(0,40)}</p>
-                                    <p className="col-1 celda">{grupos[i].horario.edificio}</p>
-                                    <p className="col-1 celda">{grupos[i].horario.aula}</p>
-                                    <p className="col-1 celda">{grupos[i].horario.dias}</p>
-                                    <p className="col-1 celda">{grupos[i].horario.horaInicio}</p>
-                                    <p className="col-1 celda">{grupos[i].horario.horaFin}</p>
-                                </div>);
-            }
+        try {
+            await fetch("http://localhost:8000/api/inicializar").then(
+                dataWrappedByPromise => dataWrappedByPromise.json()
+            ).then(
+                data => {
+                    res = data;
+                }
+            );
             
-            this.setState({
-                totalProfesores: datos.totalProfesores,
-                totalDepartamentos: datos.totalDepartamentos,
-                totalMaterias: datos.totalMaterias,
-                totalEdificios: datos.totalEdificios,
-                colisiones: datos.colisiones,
-                colisionesAMostrar: colisionesCad,
-                iColisionInicial: i,
-                mostrarBotonSiguiente: "inline",
-                nombreArchivo: datos.nombreArchivo
-            });
-        });
-
-        this.socket.on('mensaje',(mensaje)=> {
-            alert(mensaje);
-        });
-    }
-
-    manejadorClick=()=> {
-        setTimeout(()=> {
-            this.socket.emit('subirArchivo');
-        },1000);
-    }
-
-    manejadorClickSiguiente = e => {
-        var colisionesCad = [], i, maxColisionesAMostrar;
-        var grupos = this.state.colisiones;
-
-        maxColisionesAMostrar = this.state.iColisionInicial+this.state.maxColisionesAVisualizar;
-        colisionesCad.push(<div className="row colision">
-                                    <p className="col-1 celda">NRC</p>
-                                    <p className="col-6 celda">Materia</p>
-                                    <p className="col-1 celda">Edificio</p>
-                                    <p className="col-1 celda">Aula</p>
-                                    <p className="col-1 celda">Dias</p>
-                                    <p className="col-1 celda">Inicio</p>
-                                    <p className="col-1 celda">Fin</p>
-                            </div>);
-        for(i = this.state.iColisionInicial;i < maxColisionesAMostrar;i++) {
-            if(i < this.state.colisiones.length) {
-            colisionesCad.push(<div className="row colision">
-                                    <p className="col-1 celda">{grupos[i].nrc}</p>
-                                    <p className="col-6 celda">{grupos[i].materia.nombre.substring(0,40)}</p>
-                                    <p className="col-1 celda">{grupos[i].horario.edificio}</p>
-                                    <p className="col-1 celda">{grupos[i].horario.aula}</p>
-                                    <p className="col-1 celda">{grupos[i].horario.dias}</p>
-                                    <p className="col-1 celda">{grupos[i].horario.horaInicio}</p>
-                                    <p className="col-1 celda">{grupos[i].horario.horaFin}</p>
-                                </div>);
+            if(res[0]) {
+                this.setState({
+                    archivo: res[0],
+                    nombreArchivo: res[0].nombre,
+                    verCruzEliminarArchivo: "visible"
+                });
+                this.pedirDatosArchivo();
             }
         }
-        
-        if(i >= this.state.colisiones.length) {
+        catch(err) {
             this.setState({
-                colisionesAMostrar: colisionesCad,
-                iColisionInicial: i,
-                mostrarBotonSiguiente: "none",
-                mostrarBotonAnterior: "inline"
-            });
-        }
-        else {
-            this.setState({
-                colisionesAMostrar: colisionesCad,
-                iColisionInicial: i,
-                mostrarBotonAnterior: "inline"
+                error: true
             });
         }
     }
 
-    manejadorClickAnterior = e => {
-        var colisionesCad = [], i, maxColisionesAMostrar;
-        var grupos = this.state.colisiones;
+    pedirDatosArchivo = async () => {
+        let configuracion;
+        var res;
 
-        i = maxColisionesAMostrar = this.state.iColisionInicial-this.state.maxColisionesAVisualizar;
-        colisionesCad.push(<div className="row colision">
-                                    <p className="col-1 celda">NRC</p>
-                                    <p className="col-6 celda">Materia</p>
-                                    <p className="col-1 celda">Edificio</p>
-                                    <p className="col-1 celda">Aula</p>
-                                    <p className="col-1 celda">Dias</p>
-                                    <p className="col-1 celda">Inicio</p>
-                                    <p className="col-1 celda">Fin</p>
-                            </div>);
-        for(i = maxColisionesAMostrar-this.state.maxColisionesAVisualizar;i < maxColisionesAMostrar;i++) {
-            colisionesCad.push(<div className="row colision">
-                                    <p className="col-1 celda">{grupos[i].nrc}</p>
-                                    <p className="col-6 celda">{grupos[i].materia.nombre.substring(0,40)}</p>
-                                    <p className="col-1 celda">{grupos[i].horario.edificio}</p>
-                                    <p className="col-1 celda">{grupos[i].horario.aula}</p>
-                                    <p className="col-1 celda">{grupos[i].horario.dias}</p>
-                                    <p className="col-1 celda">{grupos[i].horario.horaInicio}</p>
-                                    <p className="col-1 celda">{grupos[i].horario.horaFin}</p>
-                                </div>);
-        }
-        
-        if(i === this.state.maxColisionesAVisualizar) {
+        try {
+            configuracion = {
+                method: "POST",
+                headers: {
+                    'accept': "application/json",
+                    'Content-Type': "application/json"
+                },
+                body: JSON.stringify(this.state.archivo)
+            };
+
+            await fetch("http://localhost:8000/api/obtenerDatos", configuracion).then(
+                dataWrappedByPromise => dataWrappedByPromise.json()
+            ).then(
+                data => {
+                    res = data;
+                }
+            );
+
             this.setState({
-                colisionesAMostrar: colisionesCad,
-                iColisionInicial: i,
-                mostrarBotonSiguiente: "inline",
-                mostrarBotonAnterior: "none"
+                totalProfesores: res.totalProfesores,
+                totalDepartamentos: res.totalDepartamentos,
+                totalMaterias: res.totalMaterias,
+                totalEdificios: res.totalEdificios,
+                colisiones: res.colisiones,
             });
+        }
+        catch(err) {
+            this.setState({
+                error: true
+            });
+        }
+    }
+
+    cambiarArchivo = e => {
+        var formData;
+
+        if(this.state.archivo) {
+            alert("ya has subido un archivo");
         }
         else {
+            if(e.target.files) {
+                formData = new FormData();
+                formData.append('archivo', e.target.files[0]);
+
+                this.setState({
+                    formulario: formData
+                });
+            }
+            else {
+                e.target.files[0].name = "no se elegió archivo";
+                alert("no has seleccionado un archivo");
+            }
+        }
+    }
+
+    subirArchivo = async e => {
+        let configuracion;
+        var res;
+
+        e.preventDefault();
+        try {
+            if(this.state.formulario) {
+                configuracion = {
+                    method: "POST",
+                    body: this.state.formulario
+                };
+
+                await fetch("http://localhost:8000/api/subir", configuracion).then(
+                    dataWrappedByPromise => dataWrappedByPromise.json()
+                ).then(
+                    data => {
+                        res = data;
+                    }
+                );
+                console.log("se subio archivo")
+
+                if(res.filasAfectadas === 1) {
+                    this.inicializarDatosArchivo();
+                }
+                else {
+                    alert("el archivo no se ha enviado");
+                }
+            }
+            else {
+                alert("no se puede subir mas de un archivo a la vez");
+            }
+        }
+        catch(err) {
             this.setState({
-                colisionesAMostrar: colisionesCad,
-                iColisionInicial: i,
-                mostrarBotonSiguiente: "inline"
+                error: true
             });
         }
+    }
+
+    verStatus = e => {
+        alert("status");
+    }
+
+    consultar = e => {
+        alert("consultar");
+    }
+
+    borrarArchivo = e => {
+        alert("eliminar archivo");
+    }
+
+    cerrarSesion = e => {
+        this.props.history.push("/");
     }
 
     render() {
-        return(
-            <div className="container-fluid">
-                <nav className="barraNavegacion">
-                    <img className="logo" src={Logo} alt="logo cucei"/>
-                    <BotonContorneado etiqueta="CERRAR SESIÓN"/>
-                </nav>
-                
-                <main className="container-fluid contenedorSubirArchivo">
-                    <div className="row">
-                        <div className="col-6">
-                            <p className="tituloPagina">Administración</p>    
-                        </div>
-                        <div className="col-6">
-                            <p className="nombreUsuario">{this.state.nombreAdministrador}</p>
-                        </div>
-                    </div>
-
-                    <div className="row justify-content-center">
-                        <p className="col-12 separacion"></p>
-                    </div>
-                    
-                    <div className="row justify-content-around">
-                        <div className="col-4">
-                            <p className="descripcion">Arrastrar aqui el archivo para que el 
-                                sistema lo organice y este disponible en la 
-                                página de consultas</p>
-                        </div>
-                        <div className="col-7">
-                            <p className="datosArchivo">
-                                <img src={IconoDocumento}
-                                    style={{
-                                        maxWidth: "16px",
-                                        maxHeight: "16px",
-                                        marginRight: "10px"
-                                    }}
-                                    alt="documento"
-                                />
-                                {this.state.nombreArchivo}
-                                {this.state.fecha}
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="row">
-                        <div className="col-5">
-                            <form action="http://localhost:4000/subir" method="POST" encType="multipart/form-data" target="_blak" onSubmit={this.manejadorClick.bind(this)}>
-                                <input className="selectorArchivo" type="file" name="archivo" accept=".txt"/>
-                                <input type="submit" value="Subir"/>
-                            </form>
-                        </div>
-                        <div className="col-7">
-                            <BotonRellenado etiqueta="status"/>
-                            <BotonRellenado etiqueta="consultar"/>
-                        </div>
-                    </div>
-                    
-                    <div className="row">
-                        <div className="col-4">
-                            <p className="total">Total profesores: {this.state.totalProfesores}</p>
-                            <p className="total">Total departamentos: {this.state.totalDepartamentos}</p>
-                            <p className="total">Total materias: {this.state.totalMaterias}</p>
-                            <p className="total">Total edificio: {this.state.totalEdificios}</p>
-                        </div>
-                        <div className="col-8">
-                            <div className="conteiner-fluid">
-                                {this.state.colisionesAMostrar}
+        if(this.state.error) {
+            return <Pagina404/>
+        }
+        else {
+            var botones = [<BotonContorneado key="1" etiqueta="CERRAR SESIÓN" onClick={this.cerrarSesion}/>];
+            return(
+                    <React.Fragment>
+                        <BarraNavegacion boton={botones} margenDerecho="850px"/>
+                        <div className="conten">
+                            <div className="row justify-content-around">
+                                <p className="col-6 etiqueta">Administración</p>
+                                <p className="col-6 etiqueta">{this.state.nombreUsuario}</p>
                             </div>
-                            <p className="totalColisiones">Total colisiones: {this.state.colisiones.length}</p>
-                            <BotonRellenado etiqueta="siguiente" 
-                                display={this.state.mostrarBotonSiguiente} 
-                                onClick={this.manejadorClickSiguiente}/>
-                            <BotonRellenado etiqueta="anterior" 
-                                display={this.state.mostrarBotonAnterior}
-                                onClick={this.manejadorClickAnterior}/>
-                        </div>
-                    </div>                        
-                </main>
 
-                <PiePagina/>
-            </div>
-        );
+                            <div className="row"><div className="col-12 separacion"/></div>
+
+                            <div className="row justify-content-around">
+                                <p className="col-5 descripcion">
+                                    Arrastrar aqui el archivo para que el 
+                                    sistema lo organice y este disponible en la 
+                                    página de consultas
+                                </p>
+                                <div className="col-7">
+                                    <VisorArchivo 
+                                        onClick={this.borrarArchivo}
+                                        nombreArchivo={this.state.nombreArchivo}
+                                        visible={this.state.verCruzEliminarArchivo}
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="row justify-content-around">
+                                <div className="col-5">
+                                    <SelectorArchivo
+                                        onChange={this.cambiarArchivo}
+                                        onClick={this.subirArchivo}
+                                    />
+                                </div>
+                                <div className="col-7">
+                                    <p className="total">Total profesores: {this.state.totalProfesores}</p>
+                                    <p className="total">Total departamentos: {this.state.totalDepartamentos}</p>
+                                    <p className="total">Total materias: {this.state.totalMaterias}</p>
+                                    <p className="total">Total edificio: {this.state.totalEdificios}</p>
+                                    <p className="total">Total colisiones: {this.state.colisiones.length}</p>
+                                    <BotonRellenado
+                                        onClick={this.verStatus} 
+                                        etiqueta="STATUS" 
+                                        flotar="left"
+                                    />
+                                    <BotonRellenado 
+                                        onClick={this.consultar}
+                                        etiqueta="CONSULTAR" 
+                                        flotar="left"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                        <PiePagina/>
+                    </React.Fragment>
+                );
+        }
     }
 }
 

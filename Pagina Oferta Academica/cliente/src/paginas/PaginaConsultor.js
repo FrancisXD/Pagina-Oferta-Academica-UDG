@@ -4,11 +4,26 @@ import BarraNavegacion from "./componentes/BarraNavegacion";
 import BotonContorneado from "./componentes/BotonContorneado";
 import FormularioConsultar from "./componentes/FormularioConsultar";
 import PiePagina from "./componentes/PiePagina";
+import Pagina404 from "./404";
 
 class PaginaConsultor extends React.Component {
     state = {
-        nombreUsuario: "Alumno",
-        consulta: []
+        nombreUsuario: null,
+        consulta: [],
+        error: false
+    }
+
+    componentDidMount() {
+        if(this.props.location.state) {
+            this.setState({
+                nombreUsuario: this.props.location.state.nombre
+            });
+        }
+        else{
+            this.setState({
+                error: true
+            });
+        }
     }
 
     cerrarSesion = e => {
@@ -24,25 +39,30 @@ class PaginaConsultor extends React.Component {
     }
 
     render() {
-        var boton = <BotonContorneado 
-                        onClick={this.cerrarSesion}
-                        etiqueta="CERRAR SESIÓN" 
-                        ancho="150px"
+        if(this.state.error) {
+            return <Pagina404/>
+        }
+        else {
+            var boton = [<BotonContorneado 
+                            key="1"
+                            onClick={this.cerrarSesion}
+                            etiqueta="CERRAR SESIÓN" 
+                            ancho="150px"
+                        />]
+            return(
+                <React.Fragment>
+                    <BarraNavegacion 
+                        margenDerecho="840px" 
+                        boton={boton}
                     />
-
-        return(
-            <React.Fragment>
-                <BarraNavegacion 
-                    margenDerecho="840px" 
-                    boton={boton}
-                />
-                <FormularioConsultar
-                    nombre={this.state.nombreUsuario}
-                    consulta={this.state.consulta}
-                />
-                <PiePagina/>
-            </React.Fragment>
-        );
+                    <FormularioConsultar
+                        nombre={this.state.nombreUsuario}
+                        consulta={this.state.consulta}
+                    />
+                    <PiePagina/>
+                </React.Fragment>
+            );
+        }
     }
 }
 

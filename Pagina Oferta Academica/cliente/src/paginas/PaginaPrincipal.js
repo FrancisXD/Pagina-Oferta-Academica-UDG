@@ -19,8 +19,8 @@ class PaginaPrincipal extends React.Component {
     }
 
     render() {
-        var botones = [<BotonContorneado ancho="150px" onClick={this.manejadorClickIniciarSesion} etiqueta="INICIAR SESIÓN"/>,
-                       <BotonRellenado onClick={this.manejadorClickRegistrarse} etiqueta="REGISTRARSE"/>];
+        var botones = [<BotonContorneado key="1" ancho="150px" onClick={this.manejadorClickIniciarSesion} etiqueta="INICIAR SESIÓN"/>,
+                       <BotonRellenado key="2" onClick={this.manejadorClickRegistrarse} etiqueta="REGISTRARSE" margenSuperior="16px"/>];
 
         return(
             <React.Fragment>

@@ -1,66 +1,38 @@
-.contenedorSubirArchivo {
-    margin: 30px;
-    padding: 20px;
-    box-shadow:  3px 3px 20px rgba(0,0,0,0.3);
-    max-width: 1210px;
-    height: 470px;
+.conten {
+    margin: 16px;
+    padding: 16px;
+    box-shadow:  5px 5px 5px rgba(0,0,0,0.3);
+    max-width: 1250px;
+    height: 500px;
 }
 
-.tituloPagina {
+.etiqueta {
     color: rgb(0,90,186);
-    font: bolder 16px Arial;
-    text-shadow: 3px 3px 20px rgba(0,0,0,0.3);
-    float: left;
-    margin-bottom: 0px;
-}
-
-.nombreUsuario {
-    color: rgb(0,90,186);
-    font: bolder 16px Arial;
-    float: left;
-    margin-bottom: 0px;
+    font: bolder 26px Arial;
+    text-shadow: 5px 5px 5px rgba(0,0,0,0.3);
+    margin: 0px;
+    padding: 0px;
 }
 
 .separacion {
-    border-top-style: solid;
-    border-top-width: 2px;
-    margin: 10px;
-    max-height: 1px;
-    max-width: 1190px;
-}
-
-.datosArchivo {
     border-style: solid;
-    max-width: auto;
-    border-right-style: none;
-    border-left-style: none;
-    border-top-width: 1px;
-    border-bottom-width: 1px;
+    border-width: 1px 0px 0px 0px;
+    margin: 16px;
+    max-height: 1px;
+    max-width: 1218px;
 }
 
 .descripcion {
     color: rgb(0,90,186);
+    font: normal 22px Arial;
     text-align: center;
 }
 
-.selectorArchivo {
-    margin: 5px;
-}
-
 .total {
-    font-size: 16px;
-    font-style: inherit;
+    font: normal 20px Arial;
     color: rgb(0,90,186);
-    margin: 5px;
+    margin: 10px;
     padding: 0px; 
-}
-
-.contenedorColisiones {
-    background-color: rgba(0,0,0,0.3);
-}
-
-.colision {
-    font-size: 14px;
 }
 
 .celda {

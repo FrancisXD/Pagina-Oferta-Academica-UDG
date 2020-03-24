@@ -1,0 +1,33 @@
+.cont {
+    border-style: solid;
+    border-width: 1px 0px 1px 0px;
+    padding: 5px;
+    margin: 0px;
+    width: 698px;
+    height: 30px;
+    display: flex;
+}
+
+.imag {
+    width: 18px;
+    height: 18px;
+    margin: 0px;
+    padding: 0px;
+}
+
+.imagCruz {
+    width: 16px;
+    height: 16px;
+    margin: 0px;
+    padding: 0px;
+    margin-left: 50px;
+}
+
+.e {
+    font: normal 16px Arial;
+    color: black;
+    display: inline-flex;
+    margin: 0px;
+    padding: 0px;
+    margin-left: 50px;
+}

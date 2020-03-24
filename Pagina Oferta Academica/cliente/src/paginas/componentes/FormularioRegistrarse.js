@@ -55,7 +55,7 @@ let formulario = (props) => (
                 placeholder="correo electronico"/>
             <BotoRellenado
                 onClick={props.onClick}
-                etiqueta="Registrarse" 
+                etiqueta="REGISTRARSE" 
                 ancho="100px"
                 margenSuperior="73px"
             />
