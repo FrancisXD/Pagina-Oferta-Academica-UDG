@@ -21,7 +21,7 @@
     "form-data": "^3.0.0",
     "formidable": "^1.2.2",
     "mysql": "^2.18.1",
-    "socket.io": "^2.3.0"
+    "socket.io": "^2.4.0"
   },
   "devDependencies": {
     "http-proxy-middleware": "^1.0.3",
